@@ -2,7 +2,7 @@
 
 English · [简体中文](README.md)
 
-**Current version: 0.1.5 Preview. The restricted compiler, full regression chain and official package checks passed. Plugin-center preflight reports zero blockers and zero reviews; GitHub publication and formal submission are in progress, not marketplace approval.** Published 0.1.3 and 0.1.4 artifacts remain immutable.
+**Current version: 0.1.5 Preview. The restricted compiler, full regression chain and official package checks passed. Plugin-center preflight reports zero blockers and zero reviews; [GitHub Preview is published](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.5); the [official plugin center](https://plugins.aiuo.net) confirms published on its stable channel. Native 0.1.5 installation remains unverified.** Published 0.1.3 and 0.1.4 artifacts remain immutable.
 
 Interactive local canvases for the **right work panel in PI-Desktop**. PI Canvas reuses the Codex Canvas SDK, renderer and versioned store, with a separate native PI adapter. It is not an official PI-Desktop or OpenAI product.
 

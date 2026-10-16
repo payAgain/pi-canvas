@@ -5,7 +5,7 @@
 - Repository: https://github.com/payAgain/pi-canvas
 - Plugin id: local.pi-canvas (keep stable for upgrades and data identity).
 - Plugin directory: plugin/; build sources and lockfile live at repository root.
-- Current release preparation: 0.1.5 Preview, source ref v0.1.5. The compiler-only distribution removes the real Node loaders; unchanged diagnostics remain readable data. Build/regressions/official package and center preflight passed (0 blockers, 0 reviews). Prior v0.1.3/v0.1.4 tags and packages remain immutable.
+- Current release: [0.1.5 GitHub Preview](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.5), source ref v0.1.5 at 19455e4a5ce8755d1394db53b6b09bb4199c4689. Official center: active, version published on stable channel, zero blockers/reviews. The compiler-only distribution removes the real Node loaders; unchanged diagnostics remain readable data. Build/regressions/official package and center preflight passed (0 blockers, 0 reviews). Prior v0.1.3/v0.1.4 tags and packages remain immutable.
 - Historical 0.1.4 preflight had seven SEC003 blockers; 0.1.5 clears them by removing unused capabilities rather than hiding executable code. Center submission/approval is recorded separately in the release task.
 - Ordinary packages do not install dependencies at runtime. Never include user libraries, tokens or external project files.
 
