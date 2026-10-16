@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node", "react", "react-dom"],
+    "esModuleInterop": true,
+    "paths": { "@codex-canvas/sdk": ["./packages/sdk/src/index.tsx"] }
+  },
+  "include": ["packages/**/*.ts", "packages/**/*.tsx", "examples/*.tsx"],
+  "exclude": ["node_modules", "plugin"]
+}

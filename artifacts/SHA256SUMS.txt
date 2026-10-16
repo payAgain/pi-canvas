@@ -1,0 +1,4 @@
+6386d53ae30fff6f532d726d20459021bf3fe6f4a63004c0a979bd5754f48a26  local.pi-canvas-0.1.0.piplug
+7b484e5f14ed640ec9fea224ae1472eecfab568bbfd4f1bdc41d076e1128903d  local.pi-canvas-0.1.1.piplug
+4c96546aa16002da5e94d078da5fc6f9849cd45f0958f6cf9b5b6407a78c0916  local.pi-canvas-0.1.2.piplug
+b21f7b444dccc5d5634604b8220b1975288b0eb9f606acd639f485c744611e72  local.pi-canvas-0.1.3.piplug

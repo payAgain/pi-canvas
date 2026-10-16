@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "id": "local.pi-canvas",
+  "name": "PI Canvas",
+  "version": "0.1.3",
+  "description": "Right-side local Canvas for PI-Desktop with isolated React views, versioned source and persistent state.",
+  "main": "backend/main.cjs",
+  "permissions": [
+    "ui.view",
+    "agent.tool.register",
+    "agent.prompt.inject",
+    "fs.read",
+    "clipboard.write"
+  ],
+  "fs": {
+    "read": {
+      "root": "workspace",
+      "scope": [
+        "**/*.tsx",
+        "**/*.jsx"
+      ]
+    }
+  },
+  "activationEvents": [
+    "onStartup",
+    "onCommand:pi-canvas.open"
+  ],
+  "engines": {
+    "piDesktop": ">=0.20.1"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "id": "pi-canvas.open",
+        "title": "PI Canvas: Show in right panel",
+        "keywords": [
+          "canvas",
+          "画布"
+        ]
+      }
+    ],
+    "skills": [
+      "skills/pi-canvas.md"
+    ],
+    "settings": [
+      {
+        "key": "enableSending",
+        "type": "boolean",
+        "default": false,
+        "title": "Allow explicit edit requests (also requires desktop.control)"
+      }
+    ],
+    "agentTools": [
+      {
+        "name": "canvas_publish",
+        "description": "Create a Canvas and select it for the right-side PI Canvas view. Read the Canvas skill/SDK; single-file TSX imports only @codex-canvas/sdk. Inspect ok, diagnostics and presentation. Never opens a detached window; the public host cannot automatically reveal the view.",
+        "risk": "medium",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "source": {
+              "type": "string",
+              "maxLength": 256000
+            }
+          },
+          "required": [
+            "title",
+            "source"
+          ]
+        }
+      },
+      {
+        "name": "canvas_update",
+        "description": "Update an explicitly identified canvas after canvas_read with its latest sourceRevision as baseRevision. Failed compilation preserves the latest successful view. Selects the canvas for the right-side view and binds this tool's host session; never opens a detached window.",
+        "risk": "medium",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "canvasId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "baseRevision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "source": {
+              "type": "string",
+              "maxLength": 256000
+            }
+          },
+          "required": [
+            "canvasId",
+            "baseRevision",
+            "title",
+            "source"
+          ]
+        }
+      },
+      {
+        "name": "canvas_open",
+        "description": "Select an explicit saved canvas for the right-side PI Canvas view; binds the host-provided session, never an inferred chat. The view must be opened from the work-panel menu; no detached-window fallback.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "canvasId": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "canvasId"
+          ]
+        }
+      },
+      {
+        "name": "canvas_open_file",
+        "description": "Import/open a Canvas TSX/JSX inside the current PI workspace through host-scoped file permissions. path may be workspace-relative or absolute within that workspace; watch defaults true. Does not rewrite the external file.",
+        "risk": "medium",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "watch": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "canvas_read",
+        "description": "Read current source, manifest, state and optional historical source revision. Read before editing; DOM paths are not AST selectors.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "canvasId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "canvasId"
+          ]
+        }
+      },
+      {
+        "name": "canvas_list",
+        "description": "List the local PI Canvas library and plugin runtimeVersion. deleted=true lists recoverable deleted canvases. Does not read chat messages or open a panel.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "deleted": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      {
+        "name": "canvas_status",
+        "description": "Read connected native surfaces and recent trusted-shell rendering reports for an explicit canvas. A fresh ready heartbeat reports iframe readiness, not screenshot/visual quality evidence. Does not open a panel or send messages.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "canvasId": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      {
+        "name": "canvas_delete",
+        "description": "Move one explicitly requested canvas into the recoverable deleted list. Requires current sourceRevision as baseRevision. Never deletes external source files.",
+        "risk": "medium",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "canvasId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "baseRevision": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "canvasId",
+            "baseRevision"
+          ]
+        }
+      },
+      {
+        "name": "canvas_restore",
+        "description": "Restore one explicitly identified deleted canvas, preserving source history and interaction state.",
+        "risk": "medium",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "canvasId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "baseRevision": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "canvasId",
+            "baseRevision"
+          ]
+        }
+      },
+      {
+        "name": "canvas_probe",
+        "description": "Select the right-side PI Canvas capability view. If it is not already open, choose PI Canvas in the work-panel view menu. Never opens a detached window or sends a chat message.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {}
+        }
+      }
+    ],
+    "views": [
+      {
+        "id": "canvas",
+        "title": {
+          "en": "PI Canvas",
+          "zh-CN": "PI Canvas"
+        },
+        "entry": "ui/index.html",
+        "order": 50
+      }
+    ]
+  },
+  "author": "payAgain",
+  "license": "MIT",
+  "homepage": "https://github.com/payAgain/pi-canvas",
+  "repository": "https://github.com/payAgain/pi-canvas",
+  "categories": [
+    "productivity"
+  ],
+  "safetyNotes": "Trusted backend uses Node for its private library and packaged assets. Project TSX/JSX reads use host permissions. Generated views run in script-only sandbox iframes with no network or same-origin access. No chat reads, draft edits or message sends in the default package. Clipboard writes require an explicit user action. Back up the library before uninstalling.",
+  "i18n": {
+    "en": {
+      "name": "PI Canvas",
+      "description": "Right-side local Canvas for PI-Desktop with isolated React views, versioned source and persistent state.",
+      "safetyNotes": "Trusted backend uses Node for its private library and packaged assets. Project TSX/JSX reads use host permissions. Generated views run in script-only sandbox iframes with no network or same-origin access. No chat reads, draft edits or message sends in the default package. Clipboard writes require an explicit user action. Back up the library before uninstalling."
+    },
+    "zh-CN": {
+      "name": "PI Canvas",
+      "description": "在 PI-Desktop 右侧展示本地交互画布，支持隔离 React 视图、源码版本与持久状态。",
+      "safetyNotes": "可信后端使用 Node 访问插件私有库和随包资源；读取项目 TSX/JSX 走宿主权限。生成视图仅在脚本沙箱 iframe 中运行，禁止网络与同源访问。默认包不读取聊天、不修改草稿、不发送消息；剪贴板写入只来自明确用户操作。卸载前请备份画布库。"
+    }
+  }
+}
