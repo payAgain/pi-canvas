@@ -4,7 +4,7 @@
 
 把长回答、表格与图表放进可以探索和继续修改的本地画布。基于 Codex Canvas 的 SDK、renderer 与版本化存储，使用 PI-Desktop 的原生插件接口，不依赖 MCP Apps 或 OpenAI UI 扩展。
 
-**当前版本：0.1.4 Preview，已兼容插件中心 main.js 入口并通过构建和官方打包；GitHub 发布进行中，官方中心被 7 项 SEC003 审计阻塞，尚未上架。** [0.1.3 GitHub 预览版](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3)保持不变。右侧视图专用，中英文界面。 0.1.2 已完成真实 view 就绪/错误/恢复复验并由用户确认侧栏布局；0.1.3 历史检查及 0.1.4 官方市场提交状态见[发布任务](docs/tasks/P3-MARKET-RELEASE.md)。已移除独立窗口入口和权限，绝不以弹窗回退。公开宿主 SDK 尚无自动展开/聚焦插件视图的接口，首次需从工作面板视图菜单选择 PI Canvas；已打开的视图接收工具的新选择。实现、验证与限制见[侧栏修复记录](docs/tasks/P1-RIGHT-VIEW.md)及[路线图](docs/ROADMAP.md)。
+**当前版本：0.1.4 Preview，已兼容插件中心 main.js 入口并通过构建和官方打包；[GitHub 预览版已发布并下载校验](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.4)，官方中心被 7 项 SEC003 审计阻塞，尚未上架。** [0.1.3 GitHub 预览版](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3)保持不变。右侧视图专用，中英文界面。 0.1.2 已完成真实 view 就绪/错误/恢复复验并由用户确认侧栏布局；0.1.3 历史检查及 0.1.4 官方市场提交状态见[发布任务](docs/tasks/P3-MARKET-RELEASE.md)。已移除独立窗口入口和权限，绝不以弹窗回退。公开宿主 SDK 尚无自动展开/聚焦插件视图的接口，首次需从工作面板视图菜单选择 PI Canvas；已打开的视图接收工具的新选择。实现、验证与限制见[侧栏修复记录](docs/tasks/P1-RIGHT-VIEW.md)及[路线图](docs/ROADMAP.md)。
 
 ## 安装开发版
 

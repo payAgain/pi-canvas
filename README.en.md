@@ -2,7 +2,7 @@
 
 English · [简体中文](README.md)
 
-**Current version: 0.1.4 Preview. The main.js compatibility entry, build and official package checks passed; GitHub publication is in progress. Official-marketplace publication is blocked by seven SEC003 findings, not approved or listed.** The published [0.1.3 Preview](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3) stays unchanged.
+**Current version: 0.1.4 Preview. The main.js compatibility entry, build and official package checks passed; [GitHub Preview is published and its downloaded artifact verified](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.4). Official-marketplace publication is blocked by seven SEC003 findings, not approved or listed.** The published [0.1.3 Preview](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3) stays unchanged.
 
 Interactive local canvases for the **right work panel in PI-Desktop**. PI Canvas reuses the Codex Canvas SDK, renderer and versioned store, with a separate native PI adapter. It is not an official PI-Desktop or OpenAI product.
 

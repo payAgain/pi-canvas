@@ -5,7 +5,7 @@
 - Repository: https://github.com/payAgain/pi-canvas
 - Plugin id: local.pi-canvas (keep stable for upgrades and data identity).
 - Plugin directory: plugin/; build sources and lockfile live at repository root.
-- Current compatibility release: 0.1.4, source ref v0.1.4. This compatibility Preview adds main.js forwarding to backend/main.cjs and a CommonJS package scope because the center requires the exact entry name main.js. Publisher and payAgain/pi-canvas repository authorization succeeded; 0.1.3 was refused before registration. The published v0.1.3 tag at 36be46e7e54a2bcef501c1daec50902de91eb20b and its package remain immutable.
+- Current compatibility release: [0.1.4 Preview](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.4), source ref v0.1.4 at a7389805246ba09098c3043d290ee76860f8d7b9; published package downloaded and verified. This compatibility Preview adds main.js forwarding to backend/main.cjs and a CommonJS package scope because the center requires the exact entry name main.js. Publisher and payAgain/pi-canvas repository authorization succeeded; 0.1.3 was refused before registration. The published v0.1.3 tag at 36be46e7e54a2bcef501c1daec50902de91eb20b and its package remain immutable.
 - Center preflight for 0.1.4 returned seven SEC003 blockers in bundled TypeScript-related code; no center release was submitted. Authentication/repository access succeeded. See the release task for exact evidence; do not bypass findings.
 - Ordinary packages do not install dependencies at runtime. Never include user libraries, tokens or external project files.
 
