@@ -159,7 +159,11 @@ if (!template.includes('/* SHELL_CSS */') || !template.includes('/* SHELL_JS */'
 await output('ui/index.html', template.replace('/* SHELL_CSS */', () => uiCSS).replace('/* SHELL_JS */', () => escapeScript(uiJS)));
 
 const manifest = JSON.parse(await readFile(path.join(plugin, 'manifest.json'), 'utf8'));
-if (manifest.id !== 'local.pi-canvas' || manifest.main !== 'backend/main.cjs' || manifest.ui?.panel || manifest.permissions.includes('ui.panel') ||
+const entryPackage = JSON.parse(await readFile(path.join(plugin, 'package.json'), 'utf8'));
+if (entryPackage.type !== 'commonjs' || (await readFile(path.join(plugin, 'main.js'), 'utf8')).trim() !== "'use strict';\nmodule.exports = require('./backend/main.cjs');") {
+  throw new Error('The marketplace main.js entry must forward to the unchanged CommonJS backend.');
+}
+if (manifest.id !== 'local.pi-canvas' || manifest.main !== 'main.js' || manifest.ui?.panel || manifest.permissions.includes('ui.panel') ||
     !manifest.permissions.includes('ui.view') || !manifest.contributes?.views?.some(view => view.id === 'canvas' && view.entry === 'ui/index.html')) {
   throw new Error('PI Canvas must be view-only: declared canvas view, ui.view, no panel entry or permission.');
 }

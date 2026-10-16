@@ -37,7 +37,7 @@ test('trusted backend protocol and independent surfaces', {timeout:120000}, asyn
   assert.equal(tools.size,declarations.length);
   let first;
   await t.test('view-only package has no detached panel entry or permission',async()=>{
-   assert.equal(manifest.version,'0.1.3');assert.equal(manifest.ui?.panel,undefined);
+   assert.equal(manifest.version,'0.1.4');assert.equal(manifest.ui?.panel,undefined);
    assert.ok(manifest.i18n.en.safetyNotes);assert.ok(manifest.i18n['zh-CN'].safetyNotes);
    assert.deepEqual(manifest.contributes.views[0].title,{en:'PI Canvas','zh-CN':'PI Canvas'});
    assert.equal(manifest.permissions.includes('ui.panel'),false);assert.equal(manifest.permissions.includes('ui.view'),true);
@@ -48,7 +48,7 @@ test('trusted backend protocol and independent surfaces', {timeout:120000}, asyn
    assert.equal(first.ok,true);assert.equal(first.presentation.opened,false);assert.equal(first.presentation.render,'unobserved');
    assert.equal(first.presentation.mode,'pi-view');assert.equal(first.presentation.selectionUpdated,true);
    assert.equal(first.presentation.reason,'HOST_VIEW_REVEAL_UNAVAILABLE');assert.equal(popups.length,0);
-   assert.equal(first.runtimeVersion,'0.1.3');assert.equal(JSON.stringify(first).includes('session-A'),false);
+   assert.equal(first.runtimeVersion,'0.1.4');assert.equal(JSON.stringify(first).includes('session-A'),false);
   });
   await t.test('unknown placement can become a view without misreporting or changing authorization',async()=>{
    const instanceId=randomUUID();const unknown=await connect(instanceId,'unknown');

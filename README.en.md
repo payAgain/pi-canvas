@@ -2,13 +2,13 @@
 
 English · [简体中文](README.md)
 
-**[0.1.3 GitHub Preview is available](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3). Official-marketplace submission is still pending publisher authorization, not approved or listed.**
+**Current version: 0.1.4 Preview. The main.js compatibility entry, build and official package checks passed; GitHub publication is in progress. Official-marketplace publication is blocked by seven SEC003 findings, not approved or listed.** The published [0.1.3 Preview](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3) stays unchanged.
 
 Interactive local canvases for the **right work panel in PI-Desktop**. PI Canvas reuses the Codex Canvas SDK, renderer and versioned store, with a separate native PI adapter. It is not an official PI-Desktop or OpenAI product.
 
 ## Install
 
-Download [local.pi-canvas-0.1.3.piplug](https://github.com/payAgain/pi-canvas/releases/download/v0.1.3/local.pi-canvas-0.1.3.piplug) and verify its digest against [SHA256SUMS.txt](artifacts/SHA256SUMS.txt). In PI-Desktop choose **Plugins → Install plugin package**, review the permissions and reload. Open **PI Canvas** from the right work-panel view menu. canvas_list should report 0.1.3.
+Download [local.pi-canvas-0.1.4.piplug](https://github.com/payAgain/pi-canvas/releases/download/v0.1.4/local.pi-canvas-0.1.4.piplug) and verify its digest against [SHA256SUMS.txt](artifacts/SHA256SUMS.txt). In PI-Desktop choose **Plugins → Install plugin package**, review the permissions and reload. Open **PI Canvas** from the right work-panel view menu. canvas_list should report 0.1.4.
 
 **No detached windows.** The public host SDK cannot automatically reveal or focus contributed views. Tool calls save/select a canvas and return presentation.opened=false with HOST_VIEW_REVEAL_UNAVAILABLE. An already-open visible view adopts the new selection when safe. Hidden views, unpublished source and active selections are not forcibly replaced. Open the view menu manually the first time.
 
@@ -46,7 +46,7 @@ Load plugin/ as a development plugin after building. The installed artifact is s
 
 ## Evidence and limitations
 
-0.1.2 was verified with real installed tools, a visible native view, compile-failure retention, runtime-error reporting/recovery and authorized file switching. The user confirmed a single right-side toolbar with no detached window. Do not treat that as native 0.1.3 or cross-platform evidence; see the current release record. Clipboard, real chat sending and all cross-platform combinations are not claimed as verified.
+0.1.2 was verified with real installed tools, a visible native view, compile-failure retention, runtime-error reporting/recovery and authorized file switching. The user confirmed a single right-side toolbar with no detached window. Do not treat that as native 0.1.3/0.1.4 or cross-platform evidence; see the current release record. Clipboard, real chat sending and all cross-platform combinations are not claimed as verified.
 
 ## License and credits
 

@@ -13,7 +13,7 @@ if (target === source || target === root || source.startsWith(target + path.sep)
   throw new Error('Refusing to stage into the source checkout or an overlapping directory.');
 }
 const allowDirectories = ['backend', 'ui', 'vendor', 'examples', 'docs', 'skills'];
-const allowFiles = ['manifest.json', 'README.md'];
+const allowFiles = ['manifest.json', 'README.md', 'main.js', 'package.json'];
 async function noSymlinks(filename) {
   let current = filename;
   while (true) {
@@ -50,10 +50,10 @@ const manifest = JSON.parse(await readFile(path.join(source, 'manifest.json'), '
 // A pre-existing matching manifest is mandatory: this is not a plugin creator.
 const previous = JSON.parse(await readFile(path.join(target, 'manifest.json'), 'utf8'));
 if (manifest.id !== 'local.pi-canvas' || previous.id !== manifest.id) throw new Error('Stage source/target plugin id must both be local.pi-canvas.');
-if (manifest.main !== 'backend/main.cjs' || manifest.ui?.panel || manifest.permissions.includes('ui.panel') || !manifest.permissions.includes('ui.view') || !manifest.contributes?.views?.some(view => view.id === 'canvas' && view.entry === 'ui/index.html')) throw new Error('Build the view-only production plugin before staging.');
+if (manifest.main !== 'main.js' || manifest.ui?.panel || manifest.permissions.includes('ui.panel') || !manifest.permissions.includes('ui.view') || !manifest.contributes?.views?.some(view => view.id === 'canvas' && view.entry === 'ui/index.html')) throw new Error('Build the view-only production plugin before staging.');
 const files = [...allowFiles];
 for (const directory of allowDirectories) files.push(...await inventory(source, directory));
-for (const required of ['backend/main.cjs', 'ui/index.html', 'vendor/types.json', 'vendor/canvas-runtime.js', 'vendor/canvas-runtime.css', 'skills/pi-canvas.md']) {
+for (const required of ['main.js', 'package.json', 'backend/main.cjs', 'ui/index.html', 'vendor/types.json', 'vendor/canvas-runtime.js', 'vendor/canvas-runtime.css', 'skills/pi-canvas.md']) {
   if (!files.includes(path.normalize(required))) throw new Error(`Missing required built resource: ${required}`);
 }
 // Preflight ALL potentially replaced paths before copying anything. Unlisted
@@ -63,12 +63,8 @@ for (const directory of allowDirectories) {
   await noSymlinks(destination);
   try { await inventory(target, directory); } catch (error) { if (error.code !== 'ENOENT') throw error; }
 }
-const oldMain = path.join(target, 'main.js');
 const oldRenderer = path.join(target, 'renderer');
-await noSymlinks(oldMain);
 await noSymlinks(oldRenderer);
-try { if (!(await lstat(oldMain)).isFile()) throw new Error('Old main.js is not a scaffold file.'); }
-catch (error) { if (error.code !== 'ENOENT') throw error; }
 let rendererEntries = [];
 try { rendererEntries = await readdir(oldRenderer, { withFileTypes: true }); }
 catch (error) { if (error.code !== 'ENOENT') throw error; }
@@ -84,7 +80,6 @@ for (const file of files.filter(name => name !== 'manifest.json')) {
   await mkdir(path.dirname(path.join(target, file)), { recursive: true });
   await copyFile(path.join(source, file), path.join(target, file));
 }
-await rm(oldMain, { force: true });
 await rm(path.join(oldRenderer, 'index.html'), { force: true });
 try { await rmdir(oldRenderer); } catch (error) { if (error.code !== 'ENOENT') throw error; }
 // Install the manifest last, after its resources exist.

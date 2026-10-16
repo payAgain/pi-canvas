@@ -1,6 +1,6 @@
 {
   "name": "pi-canvas",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "description": "Self-contained PI Desktop Canvas plugin build.",
   "license": "MIT",

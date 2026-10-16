@@ -6,7 +6,7 @@ if (args.length !== 1 || !['--enable', '--disable'].includes(args[0])) throw new
 const file = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../plugin/manifest.json');
 const original = fs.readFileSync(file, 'utf8');
 const manifest = JSON.parse(original);
-if (manifest.id !== 'local.pi-canvas' || manifest.main !== 'backend/main.cjs' || !Array.isArray(manifest.permissions)) throw new Error('Unexpected PI Canvas manifest; aborting.');
+if (manifest.id !== 'local.pi-canvas' || manifest.main !== 'main.js' || !Array.isArray(manifest.permissions)) throw new Error('Unexpected PI Canvas manifest; aborting.');
 const enabled = args[0] === '--enable';
 const permissions = manifest.permissions.filter(value => value !== 'desktop.control');
 if (enabled) permissions.push('desktop.control');

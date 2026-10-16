@@ -11,7 +11,7 @@ function fixture(initial){
  globalThis.window={addEventListener(){},matchMedia(){schemeReads++;return {matches:false,addEventListener(){},removeEventListener(){}};},pluginBridge:{
   on(event,handler){handlers.set(event,handler);return()=>handlers.delete(event);},
   async invoke(channel){
-   if(channel==='canvas.connect')return {ok:true,data:{session:'a'.repeat(64),revision:1,canSend:false,sendReason:'',sessionLabel:'未绑定聊天',runtimeVersion:'0.1.3'}};
+   if(channel==='canvas.connect')return {ok:true,data:{session:'a'.repeat(64),revision:1,canSend:false,sendReason:'',sessionLabel:'未绑定聊天',runtimeVersion:'0.1.4'}};
    if(channel==='app.getAppearance')return initial;
    throw new Error('Unexpected mock channel');
   },

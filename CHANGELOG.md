@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.4
+
+- Add a minimal CommonJS main.js entry forwarding to the unchanged backend/main.cjs, satisfying the plugin center's stricter entry-name rule.
+- Declare the plugin package as CommonJS so directory loading is not affected by an ancestor package's type: module.
+- Include and validate both entry files in build/staging; keep permissions, right-side-only presentation and generated-code isolation unchanged.
+- Preserve the published v0.1.3 tag and package. Native 0.1.4 installation remains unverified; publication status is recorded separately.
+
 ## 0.1.3
 
 - Prepare the first public GitHub and official-marketplace submission from payAgain/pi-canvas.
