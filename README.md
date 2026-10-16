@@ -4,11 +4,11 @@
 
 把长回答、表格与图表放进可以探索和继续修改的本地画布。基于 Codex Canvas 的 SDK、renderer 与版本化存储，使用 PI-Desktop 的原生插件接口，不依赖 MCP Apps 或 OpenAI UI 扩展。
 
-**当前版本：0.1.4 Preview，已兼容插件中心 main.js 入口并通过构建和官方打包；[GitHub 预览版已发布并下载校验](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.4)，官方中心被 7 项 SEC003 审计阻塞，尚未上架。** [0.1.3 GitHub 预览版](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3)保持不变。右侧视图专用，中英文界面。 0.1.2 已完成真实 view 就绪/错误/恢复复验并由用户确认侧栏布局；0.1.3 历史检查及 0.1.4 官方市场提交状态见[发布任务](docs/tasks/P3-MARKET-RELEASE.md)。已移除独立窗口入口和权限，绝不以弹窗回退。公开宿主 SDK 尚无自动展开/聚焦插件视图的接口，首次需从工作面板视图菜单选择 PI Canvas；已打开的视图接收工具的新选择。实现、验证与限制见[侧栏修复记录](docs/tasks/P1-RIGHT-VIEW.md)及[路线图](docs/ROADMAP.md)。
+**当前版本：0.1.5 Preview。已移除编译器中的 Node 系统与语言服务加载能力，完整回归和官方打包通过；插件中心预检 0 blocker、0 review，GitHub 发布及正式提交进行中。** [0.1.3 GitHub 预览版](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3)保持不变。右侧视图专用，中英文界面。 0.1.2 已完成真实 view 就绪/错误/恢复复验并由用户确认侧栏布局；0.1.5 检查及官方市场提交状态见[发布任务](docs/tasks/P3-MARKET-RELEASE.md)。已移除独立窗口入口和权限，绝不以弹窗回退。公开宿主 SDK 尚无自动展开/聚焦插件视图的接口，首次需从工作面板视图菜单选择 PI Canvas；已打开的视图接收工具的新选择。实现、验证与限制见[侧栏修复记录](docs/tasks/P1-RIGHT-VIEW.md)及[路线图](docs/ROADMAP.md)。
 
 ## 安装开发版
 
-在 PI-Desktop 插件页选择「从文件安装」，导入 [local.pi-canvas-0.1.4.piplug](https://github.com/payAgain/pi-canvas/releases/download/v0.1.4/local.pi-canvas-0.1.4.piplug)，确认 Agent 工具、Skill、`ui.view`、TSX/JSX 读取和剪贴板权限。升级后重新加载插件，关闭旧版已打开的独立窗口，再从**右侧工作面板的视图菜单选择 PI Canvas**。必要时新建聊天刷新工具；`canvas_list` 应返回 0.1.4。新版不申请 `ui.panel`。
+在 PI-Desktop 插件页选择「从文件安装」，导入 [local.pi-canvas-0.1.5.piplug](https://github.com/payAgain/pi-canvas/releases/download/v0.1.5/local.pi-canvas-0.1.5.piplug)，确认 Agent 工具、Skill、`ui.view`、TSX/JSX 读取和剪贴板权限。升级后重新加载插件，关闭旧版已打开的独立窗口，再从**右侧工作面板的视图菜单选择 PI Canvas**。必要时新建聊天刷新工具；`canvas_list` 应返回 0.1.5。新版不申请 `ui.panel`。
 
 安装包与 [SHA-256 校验文件](artifacts/SHA256SUMS.txt) 随 GitHub Release 提供。默认版不包含桌面控制权限，直接消息发送保持关闭。0.1.2 已完成真实侧栏接收、类型错误保留、运行错误上报与修复、授权文件切换及返回验证，并取得用户界面确认。模拟浏览器、构建和打包均不替代这些原生证据；真实剪贴板、交互写入与跨平台仍未在本轮验收。
 
@@ -49,7 +49,7 @@ npm test          # 在 PI 会话中运行，临时数据写入 PI_SCRATCH_DIR
 
 打开后调用 `canvas_status({canvasId})`，查看各界面的连接、`loading / ready / error`、最近心跳、可见性和 `matchesPublished`。报告超过 20 秒或不是当前版本时不能算当前成功证据；`fresh ready` 是可信外壳收到 iframe 就绪消息，不代表截图或内容正确性。工具打开成功、编译成功与实际渲染分别记录。
 
-0.1.3 的核心 12 项、协议 12 个子场景与 3 项外观时序回归均通过；官方 i18n 门槛为 0 失败。模拟浏览器验证了双语切换保留未发布输入与 iframe；最终包仍待原生安装复验。检查详情见[发布记录](docs/tasks/P3-MARKET-RELEASE.md)。历史模拟交互及 0.1.1 原生结果见[安装验证记录](docs/tasks/P1-INSTALLED-VERIFICATION.md)，本次结果见[侧栏修复记录](docs/tasks/P1-RIGHT-VIEW.md)。没有发送真实聊天消息或删除已有库。
+0.1.5 的核心 12 项、协议 12 个子场景、桥接 3 项与编译器 4 项回归全部通过；编译结果和诊断与完整 TypeScript 对全部示例及边界输入精确一致。官方 i18n 门槛为 0 失败，中心预检为 0 blocker、0 review。尚未完成精确 0.1.5 原生安装复验；历史模拟或 0.1.2 原生证据不替代新版验收。见[发布记录](docs/tasks/P3-MARKET-RELEASE.md)及[编译器边界](docs/COMPILER.md)。没有发送真实聊天消息或操作真实用户画布。
 
 ## 文件与数据
 

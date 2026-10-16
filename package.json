@@ -1,6 +1,6 @@
 {
   "name": "pi-canvas",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "description": "Self-contained PI Desktop Canvas plugin build.",
   "license": "MIT",
@@ -11,7 +11,7 @@
   "scripts": {
     "build": "tsc --noEmit && node scripts/build.mjs",
     "stage": "node scripts/stage.mjs",
-    "test": "node scripts/test.mjs && node scripts/check-host.mjs && node scripts/check-bridge.mjs"
+    "test": "node scripts/test.mjs && node scripts/check-host.mjs && node scripts/check-bridge.mjs && node --test --test-concurrency=1 tests/compiler.test.mjs"
   },
   "dependencies": {
     "@mantine/charts": "7.17.8",

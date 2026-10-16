@@ -10,7 +10,7 @@ const directory=await mkdtemp(path.join(scratch,'pi-canvas-host-'));
 const marker=randomUUID();await writeFile(path.join(directory,'.owner'),marker,{flag:'wx'});
 try{
  const packaged=path.join(directory,'plugin');await mkdir(path.join(packaged,'backend'),{recursive:true});await mkdir(path.join(packaged,'vendor'));
- for(const file of ['manifest.json','main.js','package.json','backend/main.cjs','vendor/types.json','vendor/canvas-runtime.js','vendor/canvas-runtime.css'])await copyFile(path.join(root,'plugin',file),path.join(packaged,file));
+ for(const file of ['manifest.json','main.js','package.json','backend/main.cjs','vendor/types.json','vendor/typescript-diagnostics.json','vendor/canvas-runtime.js','vendor/canvas-runtime.css'])await copyFile(path.join(root,'plugin',file),path.join(packaged,file));
  const result=spawnSync(process.execPath,['--test','--test-concurrency=1','--test-reporter=tap',path.join(root,'tests/host.test.mjs')],{
   cwd:directory,stdio:'inherit',timeout:120000,env:{...process.env,PI_CANVAS_HOST_ROOT:directory,PI_CANVAS_HOST_BUNDLE:path.join(packaged,'main.js')},
  });

@@ -9,7 +9,7 @@ const root = process.env.PI_CANVAS_HOST_ROOT;
 assert.ok(root && path.isAbsolute(root) && process.env.PI_CANVAS_HOST_BUNDLE, 'Run through scripts/check-host.mjs');
 const module = createRequire(import.meta.url)(process.env.PI_CANVAS_HOST_BUNDLE);
 const declarations = ['canvas_publish','canvas_update','canvas_open','canvas_read','canvas_list','canvas_status','canvas_delete','canvas_restore','canvas_probe'].map(name=>({name,description:name,risk:'low',schema:{type:'object'}}));
-const packagedManifest=JSON.parse(await readFile(path.resolve(path.dirname(process.env.PI_CANVAS_HOST_BUNDLE),'../manifest.json'),'utf8'));
+const packagedManifest=JSON.parse(await readFile(path.resolve(path.dirname(process.env.PI_CANVAS_HOST_BUNDLE),'manifest.json'),'utf8'));
 const manifest = {...packagedManifest,permissions:[...packagedManifest.permissions],contributes:{...packagedManifest.contributes,agentTools:declarations}};
 const popups=[], toasts=[];
 const tools=new Map(), commands=new Map(), prompts=[];
@@ -37,7 +37,7 @@ test('trusted backend protocol and independent surfaces', {timeout:120000}, asyn
   assert.equal(tools.size,declarations.length);
   let first;
   await t.test('view-only package has no detached panel entry or permission',async()=>{
-   assert.equal(manifest.version,'0.1.4');assert.equal(manifest.ui?.panel,undefined);
+   assert.equal(manifest.version,'0.1.5');assert.equal(manifest.ui?.panel,undefined);
    assert.ok(manifest.i18n.en.safetyNotes);assert.ok(manifest.i18n['zh-CN'].safetyNotes);
    assert.deepEqual(manifest.contributes.views[0].title,{en:'PI Canvas','zh-CN':'PI Canvas'});
    assert.equal(manifest.permissions.includes('ui.panel'),false);assert.equal(manifest.permissions.includes('ui.view'),true);
@@ -48,7 +48,7 @@ test('trusted backend protocol and independent surfaces', {timeout:120000}, asyn
    assert.equal(first.ok,true);assert.equal(first.presentation.opened,false);assert.equal(first.presentation.render,'unobserved');
    assert.equal(first.presentation.mode,'pi-view');assert.equal(first.presentation.selectionUpdated,true);
    assert.equal(first.presentation.reason,'HOST_VIEW_REVEAL_UNAVAILABLE');assert.equal(popups.length,0);
-   assert.equal(first.runtimeVersion,'0.1.4');assert.equal(JSON.stringify(first).includes('session-A'),false);
+   assert.equal(first.runtimeVersion,'0.1.5');assert.equal(JSON.stringify(first).includes('session-A'),false);
   });
   await t.test('unknown placement can become a view without misreporting or changing authorization',async()=>{
    const instanceId=randomUUID();const unknown=await connect(instanceId,'unknown');

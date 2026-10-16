@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "local.pi-canvas",
   "name": "PI Canvas",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Right-side local Canvas for PI-Desktop with isolated React views, versioned source and persistent state.",
   "main": "main.js",
   "permissions": [

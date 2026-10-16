@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.5
+
+- Build a hash-pinned compiler-only TypeScript distribution instead of shipping Node system loading, language/server services and optional Node instrumentation.
+- Retain the real semantic checker, upstream transpilation and unchanged diagnostics as readable JSON data; generated React remains isolated from Node.
+- Add fail-closed source-shape/hash checks, executable-loader AST audits, restricted API checks and parity regressions against full TypeScript.
+- Keep previous release tags/packages immutable. Marketplace and native evidence are tracked separately.
+
 ## 0.1.4
 
 - Add a minimal CommonJS main.js entry forwarding to the unchanged backend/main.cjs, satisfying the plugin center's stricter entry-name rule.

@@ -1,10 +1,12 @@
 # P3: public releases and official-marketplace submission
 
-Status: GitHub source, tag and preview release are published and the remote package was downloaded and verified. The public repository is [payAgain/pi-canvas](https://github.com/payAgain/pi-canvas), with [v0.1.3 Preview](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3). Publisher device authorization and GitHub App access to payAgain/pi-canvas now succeeded. The center refused 0.1.3 before registration because main must be exactly main.js. The user approved a separate 0.1.4 Preview compatibility release. Its build, entry-load, official package and i18n checks passed; center dry-run returned readyToPublish=false with seven SEC003 blockers. GitHub 0.1.4 Preview is now published and its remote package was downloaded and verified; no center 0.1.4 version has been submitted. GitHub login is not plugin-center authorization.
+Current: 0.1.5 fixes the SEC003 compiler boundary. Build, isolated regressions, official packaging and actual center preflight passed (0 blockers, 0 reviews, readyToPublish=true). GitHub publication and formal center submission are in progress; native 0.1.5 evidence is not claimed.
+
+Historical 0.1.3/0.1.4: GitHub source, tag and preview release are published and the remote package was downloaded and verified. The public repository is [payAgain/pi-canvas](https://github.com/payAgain/pi-canvas), with [v0.1.3 Preview](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3). Publisher device authorization and GitHub App access to payAgain/pi-canvas now succeeded. The center refused 0.1.3 before registration because main must be exactly main.js. The user approved a separate 0.1.4 Preview compatibility release. Its build, entry-load, official package and i18n checks passed; center dry-run returned readyToPublish=false with seven SEC003 blockers. GitHub 0.1.4 Preview is now published and its remote package was downloaded and verified; no center 0.1.4 version has been submitted. GitHub login is not plugin-center authorization.
 
 ## Identity and scope
 
-- Plugin id: local.pi-canvas; current compatibility version: 0.1.4; historical published version: 0.1.3; repository plugin directory: plugin/.
+- Plugin id: local.pi-canvas; current version: 0.1.5; historical published versions: 0.1.3/0.1.4; repository plugin directory: plugin/.
 - SDK compatibility import remains @codex-canvas/sdk. No detached-window fallback, added desktop-control grant, automatic chat send or library migration.
 - Published source tag: refs/tags/v0.1.3, commit 36be46e7e54a2bcef501c1daec50902de91eb20b. GitHub is a prerelease because the exact 0.1.3 artifact has not yet been installed/reloaded for native verification. Historical 0.1.2 native evidence is not claimed for 0.1.3.
 - Runtime files and the official package contain no user library or publisher credentials. Binary artifacts are Release attachments, not source-history files.
@@ -22,7 +24,7 @@ Status: GitHub source, tag and preview release are published and the remote pack
 
 ## Remaining evidence and limitations
 
-Exact 0.1.3/0.1.4 native installation/reload, real clipboard interaction, chat sending and cross-platform operation are not claimed. First automatic reveal/focus still lacks a public host API, with no popup/browser fallback. [0.1.2 native evidence](P1-RIGHT-VIEW.md) remains separate.
+Exact 0.1.3/0.1.4/0.1.5 native installation/reload, real clipboard interaction, chat sending and cross-platform operation are not claimed. First automatic reveal/focus still lacks a public host API, with no popup/browser fallback. [0.1.2 native evidence](P1-RIGHT-VIEW.md) remains separate.
 
 The plugin center requires its own authorization and repository binding. No waiting version will be resubmitted, no token is committed/logged, and a GitHub release is not described as marketplace approval. The completed GitHub publication and the currently blocked center step are recorded below.
 
@@ -49,3 +51,15 @@ The plugin center requires its own authorization and repository binding. No wait
 - The backend, browser runtime and CSS match 0.1.3 byte-for-byte. Type assets differ only in their virtual package.json version (0.1.3 → 0.1.4), not declarations or dependency versions.
 - Final plugin_status was queried once and returned an ownership refusal: this account does not own local.pi-canvas. Together with the earlier empty owned-plugin list, no owned plugin or waiting release was obtained in this attempt. This does not establish whether that id exists globally.
 - No full regression suite was rerun, and no native 0.1.4 installation evidence is claimed. Center publication remains blocked on SEC003 treatment/operator review; do not report the GitHub release as marketplace approval.
+
+## SEC003 resolution / 0.1.5
+
+Status: implementation and verification passed; GitHub publication and center submission in progress. The user explicitly authorized isolated regression and boundary verification. The 0.1.4 source/tag/package remain immutable.
+
+The fix projects the pinned TypeScript npm distribution into a compiler-only API, removes Node system initialization and Node instrumentation, excludes language/server services, and retains the unchanged full diagnostic table as readable JSON data. No executable code is moved behind a different extension, dynamically loaded, encoded or evaluated. See [compiler design/provenance](../COMPILER.md). Native 0.1.5 installation is not yet verified; center clearance will be recorded from the actual response.
+
+- npm run build passed. Regressions: 12 core, 12 host subcases (13 including parent), 3 bridge and 4 compiler cases; all passed, no skips. Compiler parity covers all 11 examples plus 7 boundary inputs, comparing complete output/diagnostics to full TypeScript. The 0.1.4 test-fixture manifest path was corrected to exercise the real main.js entry.
+- One bounded static review found no concrete in-scope defect; no second review was started. All generated-code inputs remained unexecuted in Node; no real user library or real chat send was used.
+- Official PluginCheck/PluginPack passed: 27 files, 7,778,946 bytes, SHA-256 bd8df7ca6337794c8ef7b84783469b1beddeabe3525499fea9315d4dd1e0458c. Four known installer permission warnings remain; permissions were not expanded. i18n: 0 fail, 7 explained review notes.
+- Actual center pack_plugin: readable=true, readyToPublish=true, blockers=0, reviews=0, findings=[]. The rebuilt preview is 7,779,471 bytes with SHA-256 8fddac21ff72cf33800627a65676d1ff175d946a0582ae59bd22bdbd0ee665ce. Every runtime file and key host-manifest block was verified against the local official package; diagnostics remain unchanged JSON data.
+- Publisher payagain and payAgain/pi-canvas authorization were refreshed; owned plugins and pending reviews were zero before submission. Source v0.1.5 and formal submission are the next steps.

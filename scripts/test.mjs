@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+import { restrictedTypeScript } from './typescript-compiler.mjs';
 import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { builtinModules } from 'node:module';
@@ -19,9 +20,10 @@ const marker = path.join(directory, '.core-test-owner');
 await writeFile(marker, ownership, { flag: 'wx' });
 let exitCode = 1;
 try {
+  const restricted = await restrictedTypeScript(root);
   const assetRoot = path.join(directory, 'detached-plugin');
   await mkdir(path.join(assetRoot, 'vendor'), { recursive: true });
-  for (const name of ['types.json', 'canvas-runtime.js', 'canvas-runtime.css']) {
+  for (const name of ['types.json', 'canvas-runtime.js', 'canvas-runtime.css', 'typescript-diagnostics.json']) {
     await copyFile(path.join(root, 'plugin/vendor', name), path.join(assetRoot, 'vendor', name));
   }
   const bundle = path.join(directory, 'core.cjs');
@@ -35,10 +37,7 @@ try {
     ].join('\n'), resolveDir: root, sourcefile: 'core-test-entry.ts', loader: 'ts' },
     bundle: true, platform: 'node', target: 'node22', format: 'cjs', outfile: bundle,
     write: false, metafile: true, sourcemap: false, logLevel: 'silent',
-    plugins: [{ name: 'disable-optional-typescript-source-maps', setup(builder) {
-      builder.onResolve({ filter: /^source-map-support$/ }, () => ({ path: 'disabled', namespace: 'optional-source-maps' }));
-      builder.onLoad({ filter: /.*/, namespace: 'optional-source-maps' }, () => ({ contents: 'exports.install = function() {};', loader: 'js' }));
-    } }],
+    plugins: [restricted.plugin],
   });
   const builtins = new Set([...builtinModules, ...builtinModules.map(name => `node:${name}`)]);
   for (const output of Object.values(result.metafile.outputs)) {

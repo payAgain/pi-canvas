@@ -13,7 +13,7 @@ This rule applies inside an existing user task. Filters, clicks, state changes a
 
 ## Discover tools and SDK
 
-Discover the installed tools by suffix: `canvas_list`, `canvas_publish`, `canvas_open`, `canvas_open_file`, `canvas_read`, `canvas_update`, `canvas_status`. The host adds a plugin namespace; never guess the exact prefix. `canvas_list` returns the PI Canvas `runtimeVersion` (expected `0.1.4`), not the host version. A missing tool or version mismatch requires a plugin reload/new chat, not a browser fallback.
+Discover the installed tools by suffix: `canvas_list`, `canvas_publish`, `canvas_open`, `canvas_open_file`, `canvas_read`, `canvas_update`, `canvas_status`. The host adds a plugin namespace; never guess the exact prefix. `canvas_list` returns the PI Canvas `runtimeVersion` (expected `0.1.5`), not the host version. A missing tool or version mismatch requires a plugin reload/new chat, not a browser fallback.
 
 Read [SDK contract](../docs/SDK.md) before writing TSX. Use one default-exported React component importing only `@codex-canvas/sdk`; this compatibility name is deliberately unchanged. Relative imports, arbitrary npm dependencies, network and local filesystem access are not supported inside generated code. Use SDK `Table` for real tables, readable headings/paragraphs for long prose, and SVG for diagrams when appropriate. Preserve citations and distinguish facts from illustrative examples.
 

@@ -17,6 +17,10 @@ The renderer uses these pinned packages through the npm registry. Their source c
 
 Package licenses are retained by the package manager in the installed packages. Bundling preserves esbuild legal comments. Keep those notices and the corresponding package licenses when distributing a built copy. Original project code is licensed under [MIT](LICENSE); third-party packages retain their original licenses. The lockfiles record direct and transitive dependencies.
 
+## Modified TypeScript compiler distribution
+
+The runtime compiler is a restricted derivative of Microsoft TypeScript 5.9.3 (Apache-2.0), built from the hash-pinned npm distribution. Node system construction, optional Node instrumentation and language/server services are omitted; compiler semantics/transpilation remain upstream. The complete original diagnostic table is retained as readable JSON data. The generated code preserves Microsoft's copyright/license and marks these modifications. See [compiler provenance and recipe](docs/COMPILER.md); full dependency licenses remain in the packaged vendor notices. This does not alter the installed npm dependency.
+
 ## cursor-canvas-web notice
 
 MIT License

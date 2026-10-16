@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+import { restrictedTypeScript } from './typescript-compiler.mjs';
 import ts from 'typescript';
 import { mkdir, readFile, writeFile, readdir, stat, lstat } from 'node:fs/promises';
 import path from 'node:path';
@@ -100,6 +101,8 @@ async function notices() {
 }
 
 const types = await typeAssets();
+const restricted = await restrictedTypeScript(root);
+await output('vendor/typescript-diagnostics.json', restricted.diagnostics);
 const runtime = await build({ ...common, entryPoints: ['packages/compiler-assets/browser-runtime.ts'],
   platform: 'browser', format: 'iife', globalName: 'PiCanvasRuntime', minify: true, outdir: 'plugin/vendor' });
 const runtimeJS = runtime.outputFiles.find(file => file.path.endsWith('.js'))?.text;
@@ -109,7 +112,8 @@ await output('vendor/canvas-runtime.js', runtimeJS);
 await output('vendor/canvas-runtime.css', runtimeCSS);
 await output('vendor/assets.json', JSON.stringify({ schemaVersion: 1, typescriptVersion: ts.version,
   runtime: { file: 'canvas-runtime.js', sha256: sha(runtimeJS) },
-  css: { file: 'canvas-runtime.css', sha256: sha(runtimeCSS) }, types: { file: 'types.json', ...types } }, null, 2) + '\n');
+  css: { file: 'canvas-runtime.css', sha256: sha(runtimeCSS) }, types: { file: 'types.json', ...types },
+  compiler: restricted.manifest }, null, 2) + '\n');
 await notices();
 await output('docs/LICENSE', await readFile(path.join(root, 'LICENSE')));
 await output('docs/THIRD_PARTY_NOTICES.md', await readFile(path.join(root, 'THIRD_PARTY_NOTICES.md')));
@@ -130,13 +134,11 @@ if (missing.length) throw new Error(`Compiler/vendor assets built. Waiting for m
 
 const backend = await build({ ...common, entryPoints: [backendEntry], platform: 'node', format: 'cjs',
   target: 'node22', outfile: 'plugin/backend/main.cjs', minify: true, metafile: true,
-  // TypeScript's optional stack-trace hook is not used by this no-sourcemap
-  // compiler. Close its optional require instead of shipping another loader.
-  plugins: [{ name: 'no-optional-source-maps', setup(builder) {
-    builder.onResolve({ filter: /^source-map-support$/ }, () => ({ path: 'disabled', namespace: 'optional-source-maps' }));
-    builder.onLoad({ filter: /.*/, namespace: 'optional-source-maps' }, () => ({ contents: 'exports.install = function() {};', loader: 'js' }));
-  } }],
+  plugins: [restricted.plugin],
 });
+if (Object.keys(backend.metafile.inputs).some(name => /node_modules[\/]typescript[\/]lib[\/]typescript\.js$/.test(name))) {
+  throw new Error('The full TypeScript npm runtime must not enter the plugin backend.');
+}
 const builtins = new Set([...builtinModules, ...builtinModules.map(name => `node:${name}`)]);
 for (const item of Object.values(backend.metafile.outputs)) {
   for (const imported of item.imports) {

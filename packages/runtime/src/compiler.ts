@@ -1,4 +1,5 @@
-import ts from 'typescript';
+import type * as TypeScript from 'typescript';
+import { createCompiler, type CompilerApi } from '../../compiler-assets/typescript-api.js';
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -10,7 +11,8 @@ interface TypeAssets {
   sdk: string;
   files: Record<string, string>;
 }
-interface Assets { types: TypeAssets; runtime: string; css: string; }
+interface DiagnosticAssets { schemaVersion: 1; typescriptVersion: string; messages: Record<string, TypeScript.DiagnosticMessage>; }
+interface Assets { types: TypeAssets; runtime: string; css: string; compiler: CompilerApi; }
 const assetsByRoot = new Map<string, Promise<Assets>>();
 
 // root is the plugin directory, in development AND after PluginPack deployment.
@@ -22,12 +24,18 @@ function loadAssets(root: string): Promise<Assets> {
       readFile(path.join(root, 'vendor/types.json'), 'utf8'),
       readFile(path.join(root, 'vendor/canvas-runtime.js'), 'utf8'),
       readFile(path.join(root, 'vendor/canvas-runtime.css'), 'utf8'),
-    ]).then(([json, runtime, css]) => {
+      readFile(path.join(root, 'vendor/typescript-diagnostics.json'), 'utf8'),
+    ]).then(([json, runtime, css, diagnosticJson]) => {
       const types = JSON.parse(json) as TypeAssets;
-      if (types.schemaVersion !== 1 || types.typescriptVersion !== ts.version || !types.files[types.sdk]) {
+      const diagnostics = JSON.parse(diagnosticJson) as DiagnosticAssets;
+      if (diagnostics.schemaVersion !== 1 || !diagnostics.messages || typeof diagnostics.messages !== 'object') {
+        throw new Error('Canvas compiler diagnostics are missing or incompatible; rebuild the plugin.');
+      }
+      const compiler = createCompiler(diagnostics.messages);
+      if (types.schemaVersion !== 1 || types.typescriptVersion !== compiler.version || diagnostics.typescriptVersion !== compiler.version || !types.files[types.sdk]) {
         throw new Error('Canvas compiler assets are missing or incompatible; rebuild the plugin.');
       }
-      return { types, runtime, css };
+      return { types, runtime, css, compiler };
     }).catch((error: unknown) => { assetsByRoot.delete(root); throw error; });
     assetsByRoot.set(root, pending);
   }
@@ -38,30 +46,31 @@ export async function compile(source: string, root: string) {
   root = path.resolve(root);
   const virtualRoot = path.join(root, 'vendor/types');
   const filename = path.join(virtualRoot, '__canvas__.tsx');
-  const tree = ts.createSourceFile(filename, source, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
-  const diagnostics: Diagnostic[] = [];
-  const report = (node: ts.Node, message: string) => {
-    const pos = tree.getLineAndCharacterOfPosition(node.getStart(tree));
-    diagnostics.push({ phase: 'policy', message, file: 'canvas.tsx', line: pos.line + 1, column: pos.character + 1 });
-  };
-  function visit(node: ts.Node) {
-    if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier) {
-      if (!ts.isStringLiteral(node.moduleSpecifier) || node.moduleSpecifier.text !== '@codex-canvas/sdk') report(node, '只允许从 @codex-canvas/sdk 导入。');
-    }
-    if (ts.isImportEqualsDeclaration(node) || ts.isImportTypeNode(node) ||
-        ((ts.isCallExpression(node) || ts.isNewExpression(node)) &&
-          (node.expression.kind === ts.SyntaxKind.ImportKeyword ||
-          (ts.isIdentifier(node.expression) && ['require', 'eval', 'Function'].includes(node.expression.text))))) {
-      report(node, '不允许动态导入、require 或动态代码执行。');
-    }
-    ts.forEachChild(node, visit);
-  }
-  visit(tree);
-  if (tree.referencedFiles.length || tree.typeReferenceDirectives.length || tree.libReferenceDirectives.length) report(tree, '不允许 triple-slash 引用。');
-  if (diagnostics.length) return { diagnostics };
-
   try {
     const assets = await loadAssets(root);
+    const ts = assets.compiler;
+    const tree = ts.createSourceFile(filename, source, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
+    const diagnostics: Diagnostic[] = [];
+    const report = (node: TypeScript.Node, message: string) => {
+      const pos = ts.getLineAndCharacterOfPosition(tree, ts.getTokenPosOfNode(node, tree));
+      diagnostics.push({ phase: 'policy', message, file: 'canvas.tsx', line: pos.line + 1, column: pos.character + 1 });
+    };
+    function visit(node: TypeScript.Node) {
+      if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier) {
+        if (!ts.isStringLiteral(node.moduleSpecifier) || node.moduleSpecifier.text !== '@codex-canvas/sdk') report(node, '只允许从 @codex-canvas/sdk 导入。');
+      }
+      if (ts.isImportEqualsDeclaration(node) || ts.isImportTypeNode(node) ||
+          ((ts.isCallExpression(node) || ts.isNewExpression(node)) &&
+            (node.expression.kind === ts.SyntaxKind.ImportKeyword ||
+            (ts.isIdentifier(node.expression) && ['require', 'eval', 'Function'].includes(String(node.expression.escapedText)))))) {
+        report(node, '不允许动态导入、require 或动态代码执行。');
+      }
+      ts.forEachChild(node, visit);
+    }
+    visit(tree);
+    if (tree.referencedFiles.length || tree.typeReferenceDirectives.length || tree.libReferenceDirectives.length) report(tree, '不允许 triple-slash 引用。');
+    if (diagnostics.length) return { diagnostics };
+
     // A closed, read-only virtual filesystem: TypeScript can only see the
     // shipped declaration closure and this one user source file.
     const normalize = (file: string) => path.resolve(file).replaceAll('\\', '/');
@@ -82,14 +91,14 @@ export async function compile(source: string, root: string) {
       }
     }
     const libDirectory = path.join(virtualRoot, 'node_modules/typescript/lib');
-    const options: ts.CompilerOptions = {
+    const options: TypeScript.CompilerOptions = {
       target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler,
       jsx: ts.JsxEmit.ReactJSX, strict: true, noEmit: true, skipLibCheck: true, esModuleInterop: true,
       types: ['react'], typeRoots: [path.join(virtualRoot, 'node_modules/@types')],
       paths: { '@codex-canvas/sdk': [path.join(virtualRoot, assets.types.sdk)] },
       lib: ['lib.es2022.d.ts', 'lib.dom.d.ts', 'lib.dom.iterable.d.ts'],
     };
-    const host: ts.CompilerHost = {
+    const host: TypeScript.CompilerHost = {
       getSourceFile(file, language) {
         if (normalize(file) === normalize(filename)) return tree;
         const text = files.get(normalize(file));
@@ -109,8 +118,8 @@ export async function compile(source: string, root: string) {
       writeFile: () => { throw new Error('Canvas typechecking must not write files.'); },
     };
     const program = ts.createProgram([filename], options, host);
-    const addDiagnostic = (item: ts.Diagnostic) => {
-      const pos = item.file && item.start !== undefined ? item.file.getLineAndCharacterOfPosition(item.start) : undefined;
+    const addDiagnostic = (item: TypeScript.Diagnostic) => {
+      const pos = item.file && item.start !== undefined ? ts.getLineAndCharacterOfPosition(item.file, item.start) : undefined;
       diagnostics.push({ phase: 'typecheck', message: ts.flattenDiagnosticMessageText(item.messageText, '\n'),
         file: item.file && normalize(item.file.fileName) === normalize(filename) ? 'canvas.tsx' : path.relative(virtualRoot, item.file?.fileName ?? filename).replaceAll('\\', '/'),
         ...(pos ? { line: pos.line + 1, column: pos.character + 1 } : {}) });
@@ -119,7 +128,7 @@ export async function compile(source: string, root: string) {
     if (diagnostics.length) return { diagnostics };
     const checker = program.getTypeChecker();
     const moduleSymbol = checker.getSymbolAtLocation(tree);
-    if (!moduleSymbol || !checker.getExportsOfModule(moduleSymbol).some(symbol => symbol.name === 'default')) {
+    if (!moduleSymbol || !checker.getExportsOfModule(moduleSymbol).some(symbol => symbol.escapedName === 'default')) {
       return { diagnostics: [{ phase: 'bundle', file: 'canvas.tsx', message: '画布必须默认导出 React 组件。' } satisfies Diagnostic] };
     }
 

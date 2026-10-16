@@ -53,7 +53,7 @@ if (manifest.id !== 'local.pi-canvas' || previous.id !== manifest.id) throw new 
 if (manifest.main !== 'main.js' || manifest.ui?.panel || manifest.permissions.includes('ui.panel') || !manifest.permissions.includes('ui.view') || !manifest.contributes?.views?.some(view => view.id === 'canvas' && view.entry === 'ui/index.html')) throw new Error('Build the view-only production plugin before staging.');
 const files = [...allowFiles];
 for (const directory of allowDirectories) files.push(...await inventory(source, directory));
-for (const required of ['main.js', 'package.json', 'backend/main.cjs', 'ui/index.html', 'vendor/types.json', 'vendor/canvas-runtime.js', 'vendor/canvas-runtime.css', 'skills/pi-canvas.md']) {
+for (const required of ['main.js', 'package.json', 'backend/main.cjs', 'ui/index.html', 'vendor/types.json', 'vendor/typescript-diagnostics.json', 'vendor/canvas-runtime.js', 'vendor/canvas-runtime.css', 'skills/pi-canvas.md']) {
   if (!files.includes(path.normalize(required))) throw new Error(`Missing required built resource: ${required}`);
 }
 // Preflight ALL potentially replaced paths before copying anything. Unlisted
