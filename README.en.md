@@ -2,6 +2,8 @@
 
 English · [简体中文](README.md)
 
+**[0.1.3 GitHub Preview is available](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3). Official-marketplace submission is still pending publisher authorization, not approved or listed.**
+
 Interactive local canvases for the **right work panel in PI-Desktop**. PI Canvas reuses the Codex Canvas SDK, renderer and versioned store, with a separate native PI adapter. It is not an official PI-Desktop or OpenAI product.
 
 ## Install

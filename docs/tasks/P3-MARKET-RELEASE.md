@@ -1,12 +1,12 @@
 # P3: 0.1.3 public release and official-marketplace submission
 
-Status: package checks completed; GitHub preview publication is being prepared. The public repository is [payAgain/pi-canvas](https://github.com/payAgain/pi-canvas). Official plugin-center submission has not occurred: its own publisher authorization and repository grant still need completion. GitHub login is not plugin-center authorization.
+Status: GitHub source, tag and preview release are published and the remote package was downloaded and verified. The public repository is [payAgain/pi-canvas](https://github.com/payAgain/pi-canvas), with [v0.1.3 Preview](https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3). Official plugin-center submission is blocked on its own publisher authorization; repository coverage/binding remains unverified. GitHub login is not plugin-center authorization.
 
 ## Identity and scope
 
 - Plugin id: local.pi-canvas; version: 0.1.3; repository plugin directory: plugin/.
 - SDK compatibility import remains @codex-canvas/sdk. No detached-window fallback, added desktop-control grant, automatic chat send or library migration.
-- Source tag planned: refs/tags/v0.1.3. GitHub will be a prerelease because the exact 0.1.3 artifact has not yet been installed/reloaded for native verification. Historical 0.1.2 native evidence is not claimed for 0.1.3.
+- Published source tag: refs/tags/v0.1.3, commit 36be46e7e54a2bcef501c1daec50902de91eb20b. GitHub is a prerelease because the exact 0.1.3 artifact has not yet been installed/reloaded for native verification. Historical 0.1.2 native evidence is not claimed for 0.1.3.
 - Runtime files and the official package contain no user library or publisher credentials. Binary artifacts are Release attachments, not source-history files.
 
 ## Verification performed
@@ -24,4 +24,17 @@ Status: package checks completed; GitHub preview publication is being prepared. 
 
 Exact 0.1.3 native installation/reload, real clipboard interaction, chat sending and cross-platform operation are not claimed. First automatic reveal/focus still lacks a public host API, with no popup/browser fallback. [0.1.2 native evidence](P1-RIGHT-VIEW.md) remains separate.
 
-The plugin center requires its own authorization and repository binding. No waiting version will be resubmitted, no token is committed/logged, and a GitHub release is not described as marketplace approval. Final source commit, GitHub release URL and actual center status will be appended after the corresponding operations succeed.
+The plugin center requires its own authorization and repository binding. No waiting version will be resubmitted, no token is committed/logged, and a GitHub release is not described as marketplace approval. The completed GitHub publication and the currently blocked center step are recorded below.
+
+## Published GitHub result
+
+- Source repository: https://github.com/payAgain/pi-canvas (public). Initial source commit: `36be46e7e54a2bcef501c1daec50902de91eb20b`; annotated tag `v0.1.3` resolves to that commit. The release tag is not moved by later documentation updates.
+- Release: https://github.com/payAgain/pi-canvas/releases/tag/v0.1.3 ; draft=false, prerelease=true.
+- Assets: local.pi-canvas-0.1.3.piplug (8,801,713 bytes) and SHA256SUMS.txt. GitHub's asset digest matches the official package digest. Both assets were downloaded again to the session test directory; the package hash and its checksum-file entry match `b21f7b444dccc5d5634604b8220b1975288b0eb9f606acd639f485c744611e72`.
+- No npm dependency directory, generated plugin build tree, binary package, user library or credential is tracked in source history. The original Codex repository was not changed.
+
+## Plugin-center blocker
+
+The private plugin-center credential file is absent. The prior device authorization never completed; its helper process has ended and the old device code is no longer used. No create_plugin or submit_version request was made. A new explicit interactive authorization and confirmation that the new repository is covered/bound are required before submission. No token or device code is included in this repository.
+
+The GitHub preview remains installable independently of the center. Next: finish publisher authorization, discover the center's actual tools, confirm id/repository ownership, submit the full manifest/runtime contract once with sourceRef=v0.1.3 and report the returned review status. Do not call a queued or submitted version approved.

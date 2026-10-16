@@ -5,7 +5,7 @@
 - Repository: https://github.com/payAgain/pi-canvas
 - Plugin id: local.pi-canvas (keep stable for upgrades and data identity).
 - Plugin directory: plugin/; build sources and lockfile live at repository root.
-- Release version: 0.1.3; source ref: refs/tags/v0.1.3 once pushed.
+- Release version: 0.1.3; published source ref: refs/tags/v0.1.3, commit 36be46e7e54a2bcef501c1daec50902de91eb20b. The GitHub release is a preview; official-marketplace authorization/submission is still pending.
 - Ordinary packages do not install dependencies at runtime. Never include user libraries, tokens or external project files.
 
 ## Build and package
